@@ -62,8 +62,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           children: [
             Icon(Icons.check_circle_outline, color: Colors.white, size: 18),
             SizedBox(width: 10),
-            Text('Profile updated successfully',
-                style: TextStyle(fontSize: 13)),
+            Text(
+              'Profile updated successfully',
+              style: TextStyle(fontSize: 13),
+            ),
           ],
         ),
         backgroundColor: AppColors.primaryMedium,
@@ -88,8 +90,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         automaticallyImplyLeading: false,
         leading: GestureDetector(
           onTap: () => Navigator.pop(context),
-          child: const Icon(Icons.arrow_back_ios_new,
-              color: AppColors.primaryDark, size: 18),
+          child: const Icon(
+            Icons.arrow_back_ios_new,
+            color: AppColors.primaryDark,
+            size: 18,
+          ),
         ),
         title: const Text(
           'Edit Profile',
@@ -141,7 +146,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         const Text(
                           'Update your personal information',
                           style: TextStyle(
-                              fontSize: 13, color: AppColors.textMuted),
+                            fontSize: 13,
+                            color: AppColors.textMuted,
+                          ),
                         ),
                       ],
                     ),
@@ -234,8 +241,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     TextSpan(
                       text: ' *',
                       style: TextStyle(
-                          color: AppColors.error, fontWeight: FontWeight.w700),
-                    )
+                        color: AppColors.error,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
                   ]
                 : [],
           ),
@@ -248,9 +257,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           maxLines: maxLines,
           validator: validator,
           style: const TextStyle(
-              fontSize: 15,
-              color: AppColors.textDark,
-              fontWeight: FontWeight.w500),
+            fontSize: 15,
+            color: AppColors.textDark,
+            fontWeight: FontWeight.w500,
+          ),
           decoration: InputDecoration(
             hintText: hint,
             prefixIcon: Icon(icon, color: AppColors.primaryMedium, size: 20),
@@ -262,28 +272,26 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             ),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(14),
-              borderSide:
-                  const BorderSide(color: AppColors.border, width: 1.5),
+              borderSide: const BorderSide(color: AppColors.border, width: 1.5),
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(14),
-              borderSide:
-                  const BorderSide(color: AppColors.border, width: 1.5),
+              borderSide: const BorderSide(color: AppColors.border, width: 1.5),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(14),
-              borderSide:
-                  const BorderSide(color: AppColors.primaryMedium, width: 2),
+              borderSide: const BorderSide(
+                color: AppColors.primaryMedium,
+                width: 2,
+              ),
             ),
             errorBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(14),
-              borderSide:
-                  const BorderSide(color: AppColors.error, width: 1.5),
+              borderSide: const BorderSide(color: AppColors.error, width: 1.5),
             ),
             focusedErrorBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(14),
-              borderSide:
-                  const BorderSide(color: AppColors.error, width: 2),
+              borderSide: const BorderSide(color: AppColors.error, width: 2),
             ),
           ),
         ),
@@ -323,11 +331,13 @@ class _BottomSaveBar extends StatelessWidget {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.primaryDark,
                   foregroundColor: Colors.white,
-                  disabledBackgroundColor:
-                      AppColors.primaryDark.withValues(alpha: 0.5),
+                  disabledBackgroundColor: AppColors.primaryDark.withValues(
+                    alpha: 0.5,
+                  ),
                   elevation: 0,
                   shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(14)),
+                    borderRadius: BorderRadius.circular(14),
+                  ),
                   padding: const EdgeInsets.symmetric(vertical: 16),
                 ),
                 child: saving
@@ -336,13 +346,18 @@ class _BottomSaveBar extends StatelessWidget {
                         height: 20,
                         child: CircularProgressIndicator(
                           strokeWidth: 2.5,
-                          valueColor:
-                              AlwaysStoppedAnimation<Color>(Colors.white),
+                          valueColor: AlwaysStoppedAnimation<Color>(
+                            Colors.white,
+                          ),
                         ),
                       )
-                    : const Text('Save Changes',
+                    : const Text(
+                        'Save Changes',
                         style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.w700)),
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
               ),
             ),
             const SizedBox(height: 8),

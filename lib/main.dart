@@ -5,7 +5,7 @@ import 'models/chat_model.dart';
 import 'models/review_model.dart';
 import 'models/notification_model.dart';
 import 'theme/app_theme.dart';
-import 'screens/sign_in_screen.dart';
+import 'screens/welcome_screen.dart';
 
 void main() {
   runApp(
@@ -37,7 +37,7 @@ class AgriFairApp extends StatelessWidget {
       title: 'AgriFair',
       debugShowCheckedModeBanner: false,
       theme: buildAppTheme(),
-      home: const SignInScreen(),
+      home: const WelcomeScreen(),
     );
   }
 }

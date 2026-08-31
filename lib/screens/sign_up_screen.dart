@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import '../theme/app_theme.dart';
-import '../widgets/agrifair_logo.dart';
-import '../widgets/primary_button.dart';
 import 'otp_verification_screen.dart';
 
 class SignUpScreen extends StatefulWidget {
@@ -18,7 +17,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmController = TextEditingController();
-  String? _gender;
   bool _obscurePassword = true;
   bool _obscureConfirm = true;
   bool _isLoading = false;
@@ -44,7 +42,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   bool get _canSubmit =>
       _nameController.text.trim().isNotEmpty &&
-      _gender != null &&
       _usernameController.text.trim().isNotEmpty &&
       _emailController.text.trim().isNotEmpty &&
       _passwordController.text.isNotEmpty &&
@@ -82,42 +79,45 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.background,
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(
-            Icons.arrow_back_ios_new,
-            color: AppColors.primaryDark,
-            size: 20,
-          ),
-          onPressed: () => Navigator.of(context).pop(),
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: SystemUiOverlayStyle.light,
+      child: Scaffold(
+        backgroundColor: AppColors.primaryDark,
+        body: Column(
+          children: [
+            _buildHeader(),
+            Expanded(child: _buildCard()),
+          ],
         ),
       ),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 28),
+    );
+  }
+
+  Widget _buildHeader() {
+    return Container(
+      width: double.infinity,
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [
+            AppColors.primaryDark,
+            Color.lerp(AppColors.primaryDark, AppColors.primaryMedium, 0.28)!,
+          ],
+        ),
+      ),
+      child: SafeArea(
+        bottom: false,
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(24, 12, 24, 26),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 8),
-              const Center(child: AgriFairLogo()),
-              const SizedBox(height: 36),
-              _buildHeroText(),
-              const SizedBox(height: 32),
-              _buildForm(),
-              const SizedBox(height: 28),
-              PrimaryButton(
-                label: 'Create Account',
-                trailingIcon: Icons.arrow_forward,
-                onPressed: _canSubmit ? _handleSignUp : null,
-                isLoading: _isLoading,
-              ),
-              const SizedBox(height: 16),
-              _buildSignInPrompt(),
-              const SizedBox(height: 40),
+              _buildBackButton(),
+              const SizedBox(height: 20),
+              _buildLogoTile(),
+              const SizedBox(height: 18),
+              _buildHeading(),
             ],
           ),
         ),
@@ -125,21 +125,91 @@ class _SignUpScreenState extends State<SignUpScreen> {
     );
   }
 
-  Widget _buildHeroText() {
-    return const Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'Create\nAccount',
-          style: TextStyle(
-            fontSize: 40,
-            fontWeight: FontWeight.w800,
-            color: AppColors.textDark,
-            height: 1.1,
-            letterSpacing: -1,
+  Widget _buildBackButton() {
+    return GestureDetector(
+      onTap: () => Navigator.of(context).pop(),
+      child: Container(
+        width: 44,
+        height: 44,
+        decoration: BoxDecoration(
+          color: AppColors.background.withValues(alpha: 0.10),
+          borderRadius: BorderRadius.circular(14),
+        ),
+        child: const Icon(
+          Icons.arrow_back_ios_new,
+          color: AppColors.background,
+          size: 18,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildLogoTile() {
+    return Container(
+      width: 64,
+      height: 64,
+      padding: const EdgeInsets.all(5),
+      decoration: BoxDecoration(
+        color: AppColors.background.withValues(alpha: 0.10),
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Image.asset(
+        'assets/products/AI, 3rd Draft(1).png',
+        fit: BoxFit.contain,
+      ),
+    );
+  }
+
+  Widget _buildHeading() {
+    return RichText(
+      text: const TextSpan(
+        style: TextStyle(
+          fontSize: 30,
+          height: 1.25,
+          color: AppColors.background,
+          letterSpacing: -0.5,
+        ),
+        children: [
+          TextSpan(
+            text: 'Create your ',
+            style: TextStyle(fontWeight: FontWeight.w600),
+          ),
+          TextSpan(
+            text: 'AgriFair',
+            style: TextStyle(fontWeight: FontWeight.w800),
+          ),
+          TextSpan(
+            text: ' account',
+            style: TextStyle(fontWeight: FontWeight.w600),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildCard() {
+    return Container(
+      width: double.infinity,
+      decoration: const BoxDecoration(
+        color: AppColors.surface,
+        borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
+      ),
+      child: SafeArea(
+        top: false,
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.fromLTRB(24, 28, 24, 28),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              _buildForm(),
+              const SizedBox(height: 26),
+              _buildSubmitButton(),
+              const SizedBox(height: 20),
+              _buildSignInPrompt(),
+            ],
           ),
         ),
-      ],
+      ),
     );
   }
 
@@ -150,22 +220,20 @@ class _SignUpScreenState extends State<SignUpScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _buildLabel('Full Name'),
+          _buildLabel('Full name'),
           _buildField(
             controller: _nameController,
             hint: 'Enter your full name',
             icon: Icons.person_outline,
             action: TextInputAction.next,
             validator: (v) {
-              if (v == null || v.trim().isEmpty)
+              if (v == null || v.trim().isEmpty) {
                 return 'Please enter your name';
+              }
               return null;
             },
           ),
-          const SizedBox(height: 14),
-          _buildLabel('Gender'),
-          _buildGenderField(),
-          const SizedBox(height: 14),
+          const SizedBox(height: 18),
           _buildLabel('Username'),
           _buildField(
             controller: _usernameController,
@@ -179,7 +247,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               return null;
             },
           ),
-          const SizedBox(height: 14),
+          const SizedBox(height: 18),
           _buildLabel('Email'),
           _buildField(
             controller: _emailController,
@@ -195,7 +263,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               return null;
             },
           ),
-          const SizedBox(height: 14),
+          const SizedBox(height: 18),
           _buildLabel('Password'),
           _buildPasswordField(
             controller: _passwordController,
@@ -206,12 +274,23 @@ class _SignUpScreenState extends State<SignUpScreen> {
             action: TextInputAction.next,
             validator: (v) {
               if (v == null || v.isEmpty) return 'Please enter a password';
-              if (v.length < 6) return 'At least 6 characters required';
+              if (v.length < 8) return 'At least 8 characters required';
+              if (!RegExp(r'\d').hasMatch(v)) return 'Include a number';
+              if (!RegExp(r'[^A-Za-z0-9]').hasMatch(v)) {
+                return 'Include a symbol';
+              }
               return null;
             },
           ),
-          const SizedBox(height: 14),
-          _buildLabel('Confirm Password'),
+          const Padding(
+            padding: EdgeInsets.only(left: 4, top: 8),
+            child: Text(
+              'Use at least 8 characters, with a number and symbol.',
+              style: TextStyle(fontSize: 12.5, color: AppColors.textMuted),
+            ),
+          ),
+          const SizedBox(height: 18),
+          _buildLabel('Confirm password'),
           _buildPasswordField(
             controller: _confirmController,
             hint: 'Re-enter your password',
@@ -221,17 +300,18 @@ class _SignUpScreenState extends State<SignUpScreen> {
             onSubmitted: (_) => _canSubmit ? _handleSignUp() : null,
             validator: (v) {
               if (v == null || v.isEmpty) return 'Please confirm your password';
-              if (v != _passwordController.text)
+              if (v != _passwordController.text) {
                 return 'Passwords do not match';
+              }
               return null;
             },
           ),
           if (showMismatch)
-            Padding(
-              padding: const EdgeInsets.only(left: 20, top: 8),
+            const Padding(
+              padding: EdgeInsets.only(left: 4, top: 8),
               child: Text(
                 'Passwords do not match',
-                style: const TextStyle(color: AppColors.error, fontSize: 13),
+                style: TextStyle(color: AppColors.error, fontSize: 12.5),
               ),
             ),
         ],
@@ -241,43 +321,45 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   Widget _buildLabel(String text) {
     return Padding(
-      padding: const EdgeInsets.only(left: 4, bottom: 8),
+      padding: const EdgeInsets.only(left: 2, bottom: 8),
       child: Text(
         text,
         style: const TextStyle(
           color: AppColors.textDark,
-          fontSize: 14,
-          fontWeight: FontWeight.w600,
+          fontSize: 13.5,
+          fontWeight: FontWeight.w700,
         ),
       ),
     );
   }
 
-  Widget _buildGenderField() {
-    return DropdownButtonFormField<String>(
-      initialValue: _gender,
-      isExpanded: true,
-      hint: const Text(
-        'Select',
-        style: TextStyle(color: AppColors.textMuted, fontSize: 15),
+  InputDecoration _fieldDecoration({
+    required String hint,
+    required IconData icon,
+    Widget? suffix,
+  }) {
+    OutlineInputBorder border(Color color, double width) => OutlineInputBorder(
+      borderRadius: BorderRadius.circular(12),
+      borderSide: BorderSide(color: color, width: width),
+    );
+
+    return InputDecoration(
+      hintText: hint,
+      fillColor: AppColors.inputFill,
+      contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 16),
+      prefixIcon: Padding(
+        padding: const EdgeInsets.only(left: 14, right: 10),
+        child: Icon(icon, color: AppColors.textMuted, size: 20),
       ),
-      style: const TextStyle(color: AppColors.textDark, fontSize: 15),
-      icon: const Padding(
-        padding: EdgeInsets.only(right: 8),
-        child: Icon(Icons.arrow_drop_down, color: AppColors.textMuted),
-      ),
-      decoration: const InputDecoration(
-        prefixIcon: Padding(
-          padding: EdgeInsets.only(left: 16, right: 8),
-          child: Icon(Icons.wc_outlined, color: AppColors.textMuted, size: 20),
-        ),
-        prefixIconConstraints: BoxConstraints(minWidth: 0, minHeight: 0),
-      ),
-      items: const [
-        DropdownMenuItem(value: 'Male', child: Text('Male')),
-        DropdownMenuItem(value: 'Female', child: Text('Female')),
-      ],
-      onChanged: (v) => setState(() => _gender = v),
+      prefixIconConstraints: const BoxConstraints(minWidth: 0, minHeight: 0),
+      suffixIcon: suffix == null
+          ? null
+          : Padding(padding: const EdgeInsets.only(right: 6), child: suffix),
+      border: border(AppColors.border, 1.2),
+      enabledBorder: border(AppColors.border, 1.2),
+      focusedBorder: border(AppColors.primaryMedium, 1.6),
+      errorBorder: border(AppColors.error, 1.2),
+      focusedErrorBorder: border(AppColors.error, 1.6),
     );
   }
 
@@ -294,14 +376,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       keyboardType: keyboardType,
       textInputAction: action,
       style: const TextStyle(color: AppColors.textDark, fontSize: 15),
-      decoration: InputDecoration(
-        hintText: hint,
-        prefixIcon: Padding(
-          padding: const EdgeInsets.only(left: 16, right: 8),
-          child: Icon(icon, color: AppColors.textMuted, size: 20),
-        ),
-        prefixIconConstraints: const BoxConstraints(minWidth: 0, minHeight: 0),
-      ),
+      decoration: _fieldDecoration(hint: hint, icon: icon),
       validator: validator,
     );
   }
@@ -321,28 +396,62 @@ class _SignUpScreenState extends State<SignUpScreen> {
       textInputAction: action,
       onFieldSubmitted: onSubmitted,
       style: const TextStyle(color: AppColors.textDark, fontSize: 15),
-      decoration: InputDecoration(
-        hintText: hint,
-        prefixIcon: const Padding(
-          padding: EdgeInsets.only(left: 16, right: 8),
-          child: Icon(Icons.lock_outline, color: AppColors.textMuted, size: 20),
-        ),
-        prefixIconConstraints: const BoxConstraints(minWidth: 0, minHeight: 0),
-        suffixIcon: Padding(
-          padding: const EdgeInsets.only(right: 8),
-          child: IconButton(
-            icon: Icon(
-              obscure
-                  ? Icons.visibility_off_outlined
-                  : Icons.visibility_outlined,
-              color: AppColors.textMuted,
-              size: 20,
-            ),
-            onPressed: onToggle,
+      decoration: _fieldDecoration(
+        hint: hint,
+        icon: Icons.lock_outline,
+        suffix: IconButton(
+          icon: Icon(
+            obscure ? Icons.visibility_outlined : Icons.visibility_off_outlined,
+            color: AppColors.textMuted,
+            size: 20,
           ),
+          onPressed: onToggle,
         ),
       ),
       validator: validator,
+    );
+  }
+
+  Widget _buildSubmitButton() {
+    return SizedBox(
+      height: 54,
+      child: ElevatedButton(
+        onPressed: _canSubmit && !_isLoading ? _handleSignUp : null,
+        style: ElevatedButton.styleFrom(
+          backgroundColor: AppColors.primaryDark,
+          foregroundColor: Colors.white,
+          disabledBackgroundColor: AppColors.primaryDark.withValues(alpha: 0.4),
+          disabledForegroundColor: Colors.white,
+          elevation: 0,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+        ),
+        child: _isLoading
+            ? const SizedBox(
+                width: 22,
+                height: 22,
+                child: CircularProgressIndicator(
+                  strokeWidth: 2.5,
+                  color: Colors.white,
+                ),
+              )
+            : const Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'Create Account',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                      letterSpacing: 0.2,
+                    ),
+                  ),
+                  SizedBox(width: 8),
+                  Icon(Icons.arrow_forward, size: 18),
+                ],
+              ),
+      ),
     );
   }
 

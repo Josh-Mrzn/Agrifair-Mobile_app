@@ -669,27 +669,19 @@ class _BannerSlideViewState extends State<_BannerSlideView>
               final t = math.sin(_walkCtrl.value * math.pi * 2) * 0.5 + 0.5;
               final scale = 1.0 + t * 0.06;
               final shiftX = (t - 0.5) * 8;
-              return ClipRect(
-                child: OverflowBox(
-                  maxWidth: double.infinity,
-                  maxHeight: double.infinity,
-                  child: Transform.translate(
-                    offset: Offset(shiftX, 0),
-                    child: Transform.scale(
-                      scale: scale,
-                      child: Image.asset(
-                        s.imagePath,
-                        fit: BoxFit.cover,
-                        width: double.infinity,
-                        height: double.infinity,
-                        errorBuilder: (_, _, _) => DecoratedBox(
-                          decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
-                              colors: s.gradient,
-                            ),
-                          ),
+              return Transform.translate(
+                offset: Offset(shiftX, 0),
+                child: Transform.scale(
+                  scale: scale,
+                  child: Image.asset(
+                    s.imagePath,
+                    fit: BoxFit.cover,
+                    errorBuilder: (_, _, _) => DecoratedBox(
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                          colors: s.gradient,
                         ),
                       ),
                     ),
@@ -708,9 +700,9 @@ class _BannerSlideViewState extends State<_BannerSlideView>
                 end: Alignment.centerRight,
                 stops: const [0.0, 0.55, 1.0],
                 colors: [
-                  s.gradient.first.withValues(alpha: 0.65),
-                  s.gradient.first.withValues(alpha: 0.18),
-                  Colors.transparent,
+                  s.gradient.first.withValues(alpha: 0.86),
+                  s.gradient.first.withValues(alpha: 0.48),
+                  s.gradient.first.withValues(alpha: 0.12),
                 ],
               ),
             ),
@@ -725,8 +717,8 @@ class _BannerSlideViewState extends State<_BannerSlideView>
                 end: Alignment.topCenter,
                 stops: const [0.0, 0.45, 1.0],
                 colors: [
-                  s.gradient.first.withValues(alpha: 0.45),
-                  s.gradient.first.withValues(alpha: 0.05),
+                  s.gradient.first.withValues(alpha: 0.72),
+                  s.gradient.first.withValues(alpha: 0.22),
                   Colors.transparent,
                 ],
               ),

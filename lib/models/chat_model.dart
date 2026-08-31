@@ -20,14 +20,16 @@ class ChatModel extends ChangeNotifier {
   final List<ChatMessage> _messages = [
     ChatMessage(
       id: 'w1',
-      text: 'Hello! 👋 Welcome to AgriFair Support. How can we assist you today?',
+      text:
+          'Hello! 👋 Welcome to AgriFair Support. How can we assist you today?',
       isFromUser: false,
       timestamp: DateTime.now().subtract(const Duration(minutes: 5)),
       isRead: false,
     ),
     ChatMessage(
       id: 'w2',
-      text: 'You can ask us about your orders, products, delivery schedules, or any other concerns. We\'re happy to help!',
+      text:
+          'You can ask us about your orders, products, delivery schedules, or any other concerns. We\'re happy to help!',
       isFromUser: false,
       timestamp: DateTime.now().subtract(const Duration(minutes: 4)),
       isRead: false,
@@ -40,13 +42,15 @@ class ChatModel extends ChangeNotifier {
       _messages.where((m) => !m.isFromUser && !m.isRead).length;
 
   void sendMessage(String text) {
-    _messages.add(ChatMessage(
-      id: DateTime.now().millisecondsSinceEpoch.toString(),
-      text: text.trim(),
-      isFromUser: true,
-      timestamp: DateTime.now(),
-      isRead: true,
-    ));
+    _messages.add(
+      ChatMessage(
+        id: DateTime.now().millisecondsSinceEpoch.toString(),
+        text: text.trim(),
+        isFromUser: true,
+        timestamp: DateTime.now(),
+        isRead: true,
+      ),
+    );
     notifyListeners();
   }
 

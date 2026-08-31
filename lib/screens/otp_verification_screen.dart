@@ -78,7 +78,9 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
       for (int i = 0; i < _codeLength; i++) {
         _controllers[i].text = i < digits.length ? digits[i] : '';
       }
-      final next = digits.length >= _codeLength ? _codeLength - 1 : digits.length;
+      final next = digits.length >= _codeLength
+          ? _codeLength - 1
+          : digits.length;
       _focusNodes[next].requestFocus();
       return;
     }
@@ -261,9 +263,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
         autofocus: index == 0,
         textAlign: TextAlign.center,
         keyboardType: TextInputType.number,
-        inputFormatters: [
-          FilteringTextInputFormatter.digitsOnly,
-        ],
+        inputFormatters: [FilteringTextInputFormatter.digitsOnly],
         maxLength: index == 0 ? _codeLength : 1,
         style: const TextStyle(
           color: AppColors.textDark,
@@ -311,9 +311,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
           child: Text(
             canResend ? 'Resend' : 'Resend in ${_secondsLeft}s',
             style: TextStyle(
-              color: canResend
-                  ? AppColors.primaryMedium
-                  : AppColors.textMuted,
+              color: canResend ? AppColors.primaryMedium : AppColors.textMuted,
               fontSize: 14,
               fontWeight: FontWeight.w700,
             ),
